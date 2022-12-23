@@ -61,7 +61,7 @@ mod tests {
 
         let now = Instant::now();
         for tc in test_cases {
-            format_mac(tc.0, &hex_digit);
+            let _ = format_mac(tc.0, &hex_digit);
             // match res {
             //     Ok(r) => {
             //         if r != tc.1 {
