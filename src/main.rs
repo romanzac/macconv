@@ -75,6 +75,6 @@ mod tests {
             //     }
             // }
         }
-        println!("{}", now.elapsed().as_micros());
+        println!("Test finished in {} microseconds", now.elapsed().as_micros());
     }
 }
