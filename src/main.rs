@@ -32,6 +32,7 @@ fn main() {
 
 #[cfg(test)]
 mod tests {
+    use std::time::Instant;
     use super::*;
 
     struct TestCases(&'static str, &'static str, bool);
@@ -58,6 +59,7 @@ mod tests {
 
         let hex_digit = Regex::new(r"[[:xdigit:]]").unwrap();
 
+        let now = Instant::now();
         for tc in test_cases {
             format_mac(tc.0, &hex_digit);
             // match res {
@@ -73,5 +75,6 @@ mod tests {
             //     }
             // }
         }
+        println!("{}", now.elapsed().as_micros());
     }
 }
