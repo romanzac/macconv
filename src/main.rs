@@ -1,32 +1,29 @@
-use regex::Regex;
 
-fn format_mac(m: &str, mac_regx: &Regex) -> Result<String, &'static str> {
+fn format_mac(m: &str) -> Result<String, &'static str> {
     let mut result = String::new();
     let mut i = 1i32;
 
+    if m.len() != 12 {
+        return Err("unknown error")
+    }
+
     for c in m.chars() {
-        if !mac_regx.is_match(&c.to_string()) || i > 12 {
-            return Err("unknown error");
+        if !c.is_ascii_hexdigit() {
+            return Err("unknown error")
         }
-        result = result + &c.to_lowercase().to_string();
-        if i < 12 && i % 2 == 0 {
-            result = result + ":".into();
+        result.push(c.to_ascii_lowercase());
+        if i != 12 && i % 2 == 0 {
+            result.push(':');
         }
         i += 1;
     }
 
-    if i == 13 {
-        Ok(result)
-    } else {
-        Err("unknown error")
-    }
-
+    Ok(result)
 }
 
 
 fn main() {
-    let hex_digit = Regex::new(r"[[:xdigit:]]").unwrap();
-    let new_mac = format_mac("D2BE423F9A3E",&hex_digit).unwrap();
+    let new_mac = format_mac("00B0D063C226").unwrap();
     println!("Converted MAC {}", new_mac);
 }
 
@@ -57,23 +54,21 @@ mod tests {
             TestCases("71:02:4B:D9:1E:72", "", true),
         ];
 
-        let hex_digit = Regex::new(r"[[:xdigit:]]").unwrap();
-
         let now = Instant::now();
         for tc in test_cases {
-            let _ = format_mac(tc.0, &hex_digit);
-            // match res {
-            //     Ok(r) => {
-            //         if r != tc.1 {
-            //             panic!("Positive failed for {}", tc.0);
-            //         };
-            //     }
-            //     Err(_) => {
-            //         if !tc.2 {
-            //             panic!("Negative test failed for {}", tc.0);
-            //         }
-            //     }
-            // }
+            let res = format_mac(tc.0);
+            match res {
+                Ok(r) => {
+                    if r != tc.1 {
+                        panic!("Positive failed for {}", tc.0);
+                    };
+                }
+                Err(_) => {
+                    if !tc.2 {
+                        panic!("Negative test failed for {}", tc.0);
+                    }
+                }
+            }
         }
         println!("Test finished in {} microseconds", now.elapsed().as_micros());
     }
