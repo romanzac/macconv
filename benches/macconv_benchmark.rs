@@ -1,7 +1,7 @@
 use criterion::{black_box, criterion_group, criterion_main, Criterion};
 
 fn format_mac(m: &str) -> Result<String, &'static str> {
-    let mut result = String::new();
+    let mut result = String::with_capacity(17);
     let mut i = 1i32;
 
     if m.len() != 12 {
@@ -13,7 +13,7 @@ fn format_mac(m: &str) -> Result<String, &'static str> {
             return Err("unknown error")
         }
         result.push(c.to_ascii_lowercase());
-        if i != 12 && i % 2 == 0 {
+        if i == 2 || i == 4 || i == 6 || i == 8 || i == 10 {
             result.push(':');
         }
         i += 1;
