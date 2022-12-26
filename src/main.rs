@@ -12,17 +12,15 @@ fn format_mac(m: &str) -> Result<String, &'static str> {
 
     let n = m.bytes();
     for c in n {
-        if c >= 65 && c <= 70 {
-            result[i] = c + 32
-        } else if c >= 48 && c <= 57 {
-            result[i] = c
-        } else {
-            return Err("unknown error")
+        match c {
+            65..=70 => result[i] = c + 32,
+            48..=57 => result[i] = c,
+            _ => return Err("unknown error")
         }
-        if i == 1 || i == 4 || i == 7 || i == 10 || i == 13 {
-            i += 1;
+        match i {
+            1 | 4 | 7 | 10 | 13 => i += 2,
+            _ => i += 1
         }
-        i += 1;
     }
 
     Ok(String::from_utf8(result).unwrap())
