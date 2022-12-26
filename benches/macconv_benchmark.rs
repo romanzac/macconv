@@ -1,25 +1,32 @@
 use criterion::{black_box, criterion_group, criterion_main, Criterion};
 
 fn format_mac(m: &str) -> Result<String, &'static str> {
-    let mut result = String::with_capacity(17);
-    let mut i = 1i32;
+    let mut result: Vec<u8> = vec![
+        0u8, 0u8, b':', 0u8, 0u8, b':', 0u8, 0u8, b':', 0u8, 0u8, b':', 0u8, 0u8, b':',
+        0u8, 0u8
+    ];
+    let mut i = 0usize;
 
     if m.len() != 12 {
         return Err("unknown error")
     }
 
-    for c in m.chars() {
-        if !c.is_ascii_hexdigit() {
+    let n = m.bytes();
+    for c in n {
+        if c >= 65 && c <= 70 {
+            result[i] = c + 32
+        } else if c >= 48 && c <= 57 {
+            result[i] = c
+        } else {
             return Err("unknown error")
         }
-        result.push(c.to_ascii_lowercase());
-        if i == 2 || i == 4 || i == 6 || i == 8 || i == 10 {
-            result.push(':');
+        if i == 1 || i == 4 || i == 7 || i == 10 || i == 13 {
+            i += 1;
         }
         i += 1;
     }
 
-    Ok(result)
+    Ok(String::from_utf8(result).unwrap())
 }
 
 fn benchmark(c: &mut Criterion) {
