@@ -1,3 +1,5 @@
+use criterion::{black_box, criterion_group, criterion_main, Criterion};
+
 pub struct FormattedMac {
     inner: [u8; 17],
 }
