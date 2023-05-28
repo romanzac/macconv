@@ -2,13 +2,12 @@ use criterion::{black_box, criterion_group, criterion_main, Criterion};
 
 fn format_mac(m: &str) -> Result<String, &'static str> {
     let mut result: Vec<u8> = vec![
-        0u8, 0u8, b':', 0u8, 0u8, b':', 0u8, 0u8, b':', 0u8, 0u8, b':', 0u8, 0u8, b':',
-        0u8, 0u8
+        0u8, 0u8, b':', 0u8, 0u8, b':', 0u8, 0u8, b':', 0u8, 0u8, b':', 0u8, 0u8, b':', 0u8, 0u8,
     ];
     let mut i = 0usize;
 
     if m.len() != 12 {
-        return Err("unknown error")
+        return Err("unknown error");
     }
 
     let n = m.bytes();
@@ -16,11 +15,11 @@ fn format_mac(m: &str) -> Result<String, &'static str> {
         match c {
             65..=70 => result[i] = c + 32,
             48..=57 => result[i] = c,
-            _ => return Err("unknown error")
+            _ => return Err("unknown error"),
         }
         match i {
             1 | 4 | 7 | 10 | 13 => i += 2,
-            _ => i += 1
+            _ => i += 1,
         }
     }
 
@@ -35,4 +34,3 @@ fn benchmark(c: &mut Criterion) {
 
 criterion_group!(benches, benchmark);
 criterion_main!(benches);
-

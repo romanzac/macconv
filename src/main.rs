@@ -1,13 +1,11 @@
-
 fn format_mac(m: &str) -> Result<String, &'static str> {
     let mut result: Vec<u8> = vec![
-        0u8, 0u8, b':', 0u8, 0u8, b':', 0u8, 0u8, b':', 0u8, 0u8, b':', 0u8, 0u8, b':',
-        0u8, 0u8
+        0u8, 0u8, b':', 0u8, 0u8, b':', 0u8, 0u8, b':', 0u8, 0u8, b':', 0u8, 0u8, b':', 0u8, 0u8,
     ];
     let mut i = 0usize;
 
     if m.len() != 12 {
-        return Err("unknown error")
+        return Err("unknown error");
     }
 
     let n = m.bytes();
@@ -15,17 +13,16 @@ fn format_mac(m: &str) -> Result<String, &'static str> {
         match c {
             65..=70 => result[i] = c + 32,
             48..=57 => result[i] = c,
-            _ => return Err("unknown error")
+            _ => return Err("unknown error"),
         }
         match i {
             1 | 4 | 7 | 10 | 13 => i += 2,
-            _ => i += 1
+            _ => i += 1,
         }
     }
 
     Ok(String::from_utf8(result).unwrap())
 }
-
 
 fn main() {
     let new_mac = format_mac("00B0D063C226").unwrap();
@@ -34,8 +31,8 @@ fn main() {
 
 #[cfg(test)]
 mod tests {
-    use std::time::Instant;
     use super::*;
+    use std::time::Instant;
 
     struct TestCases(&'static str, &'static str, bool);
 
@@ -75,6 +72,9 @@ mod tests {
                 }
             }
         }
-        println!("Test finished in {} microseconds", now.elapsed().as_micros());
+        println!(
+            "Test finished in {} microseconds",
+            now.elapsed().as_micros()
+        );
     }
 }

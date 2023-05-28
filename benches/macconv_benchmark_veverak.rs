@@ -15,7 +15,6 @@ use criterion::{black_box, criterion_group, criterion_main, Criterion};
 // As we're starting to get comfortable with unsafe code after applying the last suggestion,
 // we can as well make the buffer [std::mem::MaybeUninit::uninit(); 17] and only write to each byte once.
 
-
 pub struct FormattedMac {
     inner: [u8; 17],
 }
@@ -70,7 +69,6 @@ pub fn format_mac(source: &str) -> Result<FormattedMac, ()> {
     })
 }
 
-
 fn benchmark(c: &mut Criterion) {
     c.bench_function("format_mac", |b| {
         b.iter(|| format_mac(black_box("00B0D063C226")))
@@ -79,4 +77,3 @@ fn benchmark(c: &mut Criterion) {
 
 criterion_group!(benches, benchmark);
 criterion_main!(benches);
-
